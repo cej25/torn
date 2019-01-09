@@ -1,0 +1,47 @@
+// ==UserScript==
+// @name         DB-Destruction
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  How many DBs would it take to destroy a faction?
+// @author       Proxima
+// @require      https://gist.github.com/raw/2625891/waitForKeyElements.js
+// @match        https://www.torn.com/factions.php*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    function mainScript() {
+
+        let data = $('#war-react-root > div > div > div > div.respect')[0].innerText
+        let number = data.replace(/^\D+/g,'')
+        number = number.replace(/,/g,"")
+
+        let min_counter = 0;
+        let max_number = number;
+        let min_number = number;
+        let max_counter = 0;
+
+        for(let i = 0; min_number > 0; i++) {
+            min_number = min_number * 0.95 - 100000
+            min_counter = min_counter + 1;
+        }
+
+        for(let i = 0; max_number > 0; i++) {
+            max_number = max_number * 0.95 - 70000
+            max_counter = max_counter + 1;
+        }
+
+        function createInfoNotice(msg,wrapName) {
+            $('<div class="info-msg-cont border-round m-top10 green" id="notifier"><div class="info-msg border-round">' +
+              '<i class="info-icon"></i><div class="delimiter"><div id="divnotifier" class="msg right-round">' + msg +
+              '</div></div></div></div>').insertAfter(wrapName);
+        }
+
+        const msg = "It would take " + min_counter + " - " + max_counter + " Dirty Bombs to destroy this faction";
+        (createInfoNotice(msg, ".content-title"));
+    };
+
+    waitForKeyElements("#war-react-root > div > div > div > div.respect", mainScript);
+})();
