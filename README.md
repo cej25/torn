@@ -1,5 +1,4 @@
-# torn
-weapon scripts
+# Torn Weapon Bonus Scripts
 
 These are basic python scripts to simulate the effects of different weapon bonuses during variable length fights. 
 
